@@ -9,21 +9,23 @@ def collect(url):
     def aux(url):
         if url[-1] == '#':
             sess.close()
-            return null
+            return None
         else:
             page = BeautifulSoup(sess.get(url).content)
             img = page.find_all('div', attrs={'id': 'comic'})[0].img
             num = url.split('/')[-2]
+            nexturl = page.find_all('a', attrs={'rel':'next'})[0]['href']
             try:
                 with open('download.log', 'a') as f:
                     f.write('[{}] Downloading from {}.\n'.format(datetime.datetime.now(), img['src']))
                 suffix = img['src'].split('.')[-1]
                 stream = sess.get('https:' + img['src'], stream=True)
                 if stream.ok:
-                    with open('{0:04d} {1}.{2}'.format(int(num), img['alt'], suffix), 'wb') as f:
+                    with open(
+                            '/xkcd/{0:04d} {1}.{2}'.format(
+                                int(num), img['alt'], suffix), 'wb') as f:
                         for chunk in stream:
                             f.write(chunk)
-                nexturl = page.find_all('a', attrs={'rel':'next'})[0]['href']
             except:
                 with open('download.log', 'a') as f:
                     f.write('[{}] Failed download {}.\n'.format(datetime.datetime.now(), img['src']))
@@ -32,4 +34,4 @@ def collect(url):
     aux(url)
 
 if __name__=='__main__':
-    collect('https://www.xkcd.com/1/')
+    collect('https://www.xkcd.com/1031/')
