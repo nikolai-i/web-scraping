@@ -34,4 +34,4 @@ def collect(url):
     aux(url)
 
 if __name__=='__main__':
-    collect('https://www.xkcd.com/1031/')
+    collect('https://www.xkcd.com/1/')
